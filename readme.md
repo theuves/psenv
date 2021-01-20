@@ -19,4 +19,6 @@ Options:
     --recursive           Retrieve all parameters within a hierarchy
     --is-dotenv           Output with the format "NAME=value"
     --is-cmd              Output for Windows Command Prompt (cmd.exe)
+    -h, --help            Print this message
+    -v, --version         Print the current version of psenv
 ```
