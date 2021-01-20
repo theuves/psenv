@@ -97,7 +97,7 @@ getParameters(path, options.recursive).then((allParameters) => {
             return `set "${name}=${value}"`;
         }
 
-        return `export ${name}=${value}`;
+        return `export ${name}='${value}'`;
     })
 
     const raw = variables.join('\n');
