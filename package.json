@@ -1,5 +1,14 @@
 {
+  "name": "psenv-cli",
+  "version": "0.0.0",
+  "description": "AWS SSM Parameter Store to environment variables.",
+  "bin": {
+    "dicio": "./index.js"
+  },
   "dependencies": {
     "aws-sdk": "^2.828.0"
-  }
+  },
+  "repository": "theuves/psenv",
+  "author": "Matheus Alves",
+  "license": "MIT"
 }
