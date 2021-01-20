@@ -4,7 +4,7 @@ const options = {
     filename: undefined,
     toUpperCase: false,
     recursive: false,
-    isDotEnv: false,
+    isDotenv: false,
     isCmd: false,
 };
 
@@ -21,7 +21,7 @@ for (let arg of args) {
             break;
         }
         case '--is-dotenv': {
-            options.isDotEnv = true;
+            options.isDotenv = true;
             break;
         }
         case '--is-cmd': {
@@ -90,7 +90,7 @@ getParameters(path, options.recursive).then((allParameters) => {
         if (options.toUpperCase) {
             name = name.toUpperCase();
         }
-        if (options.filename || options.isDotEnv) {
+        if (options.filename || options.isDotenv) {
             return `${name}=${value}`;
         }
         if (options.isCmd) {
