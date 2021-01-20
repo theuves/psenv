@@ -1,10 +1,10 @@
 let path;
 
 const options = {
-	filename: undefined,
+    filename: undefined,
     toUpperCase: false,
     recursive: false,
-	isDotEnv: false,
+    isDotEnv: false,
     isCmd: false,
 };
 
@@ -12,22 +12,22 @@ const args = process.argv.slice(2);
 
 for (let arg of args) {
     switch (arg) {
-		case '--to-upper-case': {
-			options.toUpperCase = true;
-			break;
+        case '--to-upper-case': {
+            options.toUpperCase = true;
+            break;
         }
         case '--recursive': {
-			options.recursive = true;
-			break;
-		}
-		case '--is-dotenv': {
-			options.isDotEnv = true;
-			break;
-		}
+            options.recursive = true;
+            break;
+        }
+        case '--is-dotenv': {
+            options.isDotEnv = true;
+            break;
+        }
         case '--is-cmd': {
             options.isCmd = true;
             break;
-		}
+        }
         default: {
             const name = arg.split('=')[0];
             const value = arg.split('=').slice(1).join('=');
