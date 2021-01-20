@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 let path;
 
 const options = {
@@ -6,6 +8,8 @@ const options = {
     recursive: false,
     isDotenv: false,
     isCmd: false,
+    help: false,
+    version: false,
 };
 
 const args = process.argv.slice(2);
@@ -26,6 +30,16 @@ for (let arg of args) {
         }
         case '--is-cmd': {
             options.isCmd = true;
+            break;
+        }
+        case '--help':
+        case '-h': {
+            options.help = true;
+            break;
+        }
+        case '--version':
+        case '-v': {
+            options.version = true;
             break;
         }
         default: {
@@ -50,6 +64,29 @@ for (let arg of args) {
     }
 }
 
+if (options.version) {
+    const {version} = require('./package.json');
+    console.log(`Version ${version}
+
+Copyright (c) 2021 by Matheus Alves.
+Source code: <https://github.com/theuves/psenv>.`);
+    process.exit(0);
+}
+
+if (!path || options.help) {
+    console.log(`Usage: psenv <PATH> [OPTION]...
+
+Options:
+    --filename=FILENAME   Export to a .env file (default name is ".env")
+    --to-upper-case       Convert the name to uppercase (e.g. name to NAME)
+    --recursive           Retrieve all parameters within a hierarchy
+    --is-dotenv           Output with the format "NAME=value"
+    --is-cmd              Output for Windows Command Prompt (cmd.exe)
+    -h, --help            Print this message
+    -v, --version         Print the current version of psenv`);
+    process.exit(Number(!options.help));
+}
+
 const allArgsWithIsPrefix = args.filter(arg => arg.startsWith('--is-'));
 
 if (allArgsWithIsPrefix.length > 0 && options.filename) {
@@ -61,18 +98,6 @@ if (allArgsWithIsPrefix.length > 0 && options.filename) {
 if (allArgsWithIsPrefix.length > 1) {
     const conflicts = allArgsWithIsPrefix.slice(0, 2);
     console.error(`[error] Conflict between ${conflicts.join(' and ')}.`);
-    process.exit(1);
-}
-
-if (!path) {
-    console.log(`Usage: psenv <PATH> [OPTION]...
-
-Options:
-    --filename=FILENAME   Export to a .env file (default name is ".env")
-    --to-upper-case       Convert the name to uppercase (e.g. name to NAME)
-    --recursive           Retrieve all parameters within a hierarchy
-    --is-dotenv           Output with the format "NAME=value"
-    --is-cmd              Output for Windows Command Prompt (cmd.exe)`);
     process.exit(1);
 }
 
