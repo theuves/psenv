@@ -6,7 +6,7 @@
 ![NPM version](https://img.shields.io/npm/v/psenv-cli)
 ![License](https://img.shields.io/npm/l/psenv-cli)
 
-A command-line tool to get parameters from [AWS Systems Manager Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) as environment variables. Useful to pass environment variables to containers on [ECS](https://aws.amazon.com/pt/ecs/?whats-new-cards.sort-by=item.additionalFields.postDateTime&whats-new-cards.sort-order=desc&ecs-blogs.sort-by=item.additionalFields.createdDate&ecs-blogs.sort-order=desc) when you don't have an implementation in the code or when you don't want to pass the parameter to [task definition via `Secret`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-taskdefinition-secret.html) (with `valueFrom`) for example.
+A command-line tool to get parameters from [AWS Systems Manager Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) as environment variables. Useful to pass environment variables to containers in [ECS](https://aws.amazon.com/pt/ecs/?whats-new-cards.sort-by=item.additionalFields.postDateTime&whats-new-cards.sort-order=desc&ecs-blogs.sort-by=item.additionalFields.createdDate&ecs-blogs.sort-order=desc) when you haven't an implementation in the code or when you don't want to pass the parameters to [task definition via `Secret`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-taskdefinition-secret.html) (with `valueFrom`).
 
 ## Installation
 
@@ -32,7 +32,7 @@ Options:
 
 ## Example
 
-Suppose that you have the following parameters on Parameter Store:
+Suppose you have the following parameters in the Parameter Store:
 
 | Name             | Value         |
 |:-----------------|:--------------|
