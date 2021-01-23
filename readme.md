@@ -11,7 +11,7 @@ A command-line tool to get parameters from [AWS Systems Manager Parameter Store]
 ## Installation
 
 - [NPM](https://www.npmjs.com/) &mdash; `npm install --global psenv-cli`
-- [Yarn](https://yarnpkg.com/) &mdash; `yarn global psenv-cli`
+- [Yarn](https://yarnpkg.com/) &mdash; `yarn global add psenv-cli`
 
 ## Usage
 
