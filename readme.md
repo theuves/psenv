@@ -15,7 +15,7 @@ A command-line tool to get parameters from [AWS Systems Manager Parameter Store]
 
 ## Usage
 
-Type `ps-env --help`.
+Type `psenv --help`.
 
 ```
 Usage: psenv <PATH> [OPTION]...
