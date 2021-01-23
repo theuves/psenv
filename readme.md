@@ -16,15 +16,15 @@ A command-line tool to get parameters from [AWS Systems Manager Parameter Store]
 ## Usage
 
 Type `psenv --help`.
-
+i
 ```
 Usage: psenv <PATH> [OPTION]...
 
 Options:
-    --filename=FILENAME   Export to a .env file (default name is ".env")
-    --to-upper-case       Convert the name to uppercase (e.g. name to NAME)
+    --output[=FILENAME]   Write to a file (e.g. --output=.env)
+    --to-upper-case       Convert the name to upper case (e.g. name to NAME)
     --recursive           Retrieve all parameters within a hierarchy
-    --is-dotenv           Output with the format "NAME=value"
+    --is-dotenv           Output with the format NAME=value
     --is-cmd              Output for Windows Command Prompt (cmd.exe)
     -h, --help            Print this message
     -v, --version         Print the current version of psenv
@@ -47,12 +47,12 @@ export NODE_ENV='development'
 export name='foo'
 ```
 
-### `--filename=FILENAME`
+### `--output=[FILENAME]`
 
-> Export to a .env file (default name is ".env").
+> Write to a file (e.g. `--output=.env`)
 
 ```bash
-$ psenv /dev --filename=.env.development
+$ psenv /dev --output=.env.development
 File is created successfully.
 
 $ cat .env
@@ -62,7 +62,7 @@ name='foo'
 
 ### `--to-upper-case`
 
-> Convert the name to uppercase (e.g. name to NAME).
+> Convert the name to upper case (e.g. `name` to `NAME`).
 
 ```bash
 $ psenv /dev --to-upper-case
@@ -84,7 +84,7 @@ export name='foo'
 
 ### `--is-dotenv`
 
-> Output with the format "NAME=value".
+> Output with the format `NAME=value`.
 
 ```bash
 $ psenv /dev --is-dotenv
