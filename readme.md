@@ -55,7 +55,7 @@ export name='foo'
 $ psenv /dev --output=.env.development
 File is created successfully.
 
-$ cat .env
+$ cat .env.development
 NODE_ENV='development'
 name='foo'
 ```
