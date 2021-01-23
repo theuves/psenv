@@ -3,7 +3,7 @@
 let path;
 
 const options = {
-    filename: undefined,
+    output: undefined,
     toUpperCase: false,
     recursive: false,
     isDotenv: false,
@@ -46,8 +46,13 @@ for (let arg of args) {
             const name = arg.split('=')[0];
             const value = arg.split('=').slice(1).join('=');
 
-            if (name === '--filename') {
-                options.filename = value || '.env';
+            if (name === '--output') {
+		if (!value) {
+		    console.error('[error] Missing FILENAME for --output.');
+		    process.exit(1);
+		}
+
+		options.output = value
                 continue;
             }
             if (arg.startsWith('-')) {
@@ -77,10 +82,10 @@ if (!path || options.help) {
     console.log(`Usage: psenv <PATH> [OPTION]...
 
 Options:
-    --filename=FILENAME   Export to a .env file (default name is ".env")
-    --to-upper-case       Convert the name to uppercase (e.g. name to NAME)
+    --output[=FILENAME]   Write to a file (e.g. --output=.env)
+    --to-upper-case       Convert the name to upper case (e.g. name to NAME)
     --recursive           Retrieve all parameters within a hierarchy
-    --is-dotenv           Output with the format "NAME=value"
+    --is-dotenv           Output with the format NAME=value
     --is-cmd              Output for Windows Command Prompt (cmd.exe)
     -h, --help            Print this message
     -v, --version         Print the current version of psenv`);
@@ -115,7 +120,7 @@ getParameters(path, options.recursive).then((allParameters) => {
         if (options.toUpperCase) {
             name = name.toUpperCase();
         }
-        if (options.filename || options.isDotenv) {
+        if (options.output || options.isDotenv) {
             return `${name}=${value}`;
         }
         if (options.isCmd) {
@@ -127,10 +132,10 @@ getParameters(path, options.recursive).then((allParameters) => {
 
     const raw = variables.join('\n');
 
-    if (options.filename) {
+    if (options.output) {
         const fs = require('fs');
 
-        fs.writeFile(options.filename, raw, (error) => {
+        fs.writeFile(options.output, raw, (error) => {
             if (error) {
                 console.error(`[error] Unable to create the file.`);
                 process.exit(1);
