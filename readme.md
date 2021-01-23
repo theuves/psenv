@@ -79,7 +79,7 @@ $ psenv / --recursive
 export NODE_ENV='development'
 export name='foo'
 export NODE_ENV='production'
-export name='foo'
+export name='bar'
 ```
 
 ### `--is-dotenv`
