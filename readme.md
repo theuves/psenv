@@ -49,7 +49,7 @@ export name='foo'
 
 ### `--output=[FILENAME]`
 
-> Write to a file (e.g. `--output=.env`)
+> Write to a file (e.g. `--output=.env`).
 
 ```bash
 $ psenv /dev --output=.env.development
