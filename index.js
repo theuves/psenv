@@ -82,13 +82,13 @@ if (!path || options.help) {
     console.log(`Usage: psenv <PATH> [OPTION]...
 
 Options:
-    --output[=FILENAME]   Write to a file (e.g. --output=.env)
-    --to-upper-case       Convert the name to upper case (e.g. name to NAME)
-    --recursive           Retrieve all parameters within a hierarchy
-    --is-dotenv           Output with the format NAME=value
-    --is-cmd              Output for Windows Command Prompt (cmd.exe)
-    -h, --help            Print this message
-    -v, --version         Print the current version of psenv`);
+    --output=FILENAME   Write to a file (e.g. --output=.env)
+    --to-upper-case     Convert the name to upper case (e.g. name to NAME)
+    --recursive         Retrieve all parameters within a hierarchy
+    --is-dotenv         Output with the format NAME=value
+    --is-cmd            Output for Windows Command Prompt (cmd.exe)
+    -h, --help          Print this message
+    -v, --version       Print the current version of psenv`);
     process.exit(Number(!options.help));
 }
 
