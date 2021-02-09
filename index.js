@@ -1,139 +1,82 @@
 #!/usr/bin/env node
-const fs = require('fs')
-const pkg = require('./package.json')
-const getParameters = require('./get-parameters')
+const fs = require('fs');
+const minimist = require('minimist');
+const { version } = require('./package.json');
+const getParameters = require('./get-parameters');
+const opts = minimist(process.argv.slice(2));
+const path = opts._[0];
 
-let path
-
-const options = {
-    output     : undefined,
-    toUpperCase: false,
-    recursive  : false,
-    isDotenv   : false,
-    isCmd      : false,
-    help       : false,
-    version    : false,
+if (!path) {
+  logError(`Usage: psenv <PATH> [OPTION]...
+Try 'psenv --help' to more information.`);
 }
 
-const args = process.argv.slice(2)
-
-for (let arg of args) {
-    switch (arg) {
-        case '--to-upper-case':
-            options.toUpperCase = true
-            break
-        case '--recursive':
-            options.recursive = true
-            break
-        case '--is-dotenv':
-            options.isDotenv = true
-            break
-        case '--is-cmd':
-            options.isCmd = true
-            break
-        case '--help':
-        case '-h':
-            options.help = true
-            break
-        case '--version':
-        case '-v':
-            options.version = true
-            break
-        default: {
-            const name = arg.split('=')[0]
-            const value = arg.split('=').slice(1).join('=')
-
-            if (name === '--output') {
-                if (!value) {
-                    console.error('[error] Missing FILENAME for --output.')
-                    process.exit(1)
-                }
-		        options.output = value
-                continue
-            }
-            if (arg.startsWith('-')) {
-                console.error(`[error] Invalid option: '${arg}'`)
-                process.exit(1)
-            }
-            if (path) {
-                console.error(`[error] Invalid argument: '${arg}'`)
-                process.exit(1)
-            }
-            path = arg
-        }
-    }
-}
-
-if (options.version) {
-    console.log(`Version ${pkg.version}
-
-Copyright (c) 2021 by ${pkg.author}.
-Source code: <https://github.com/${pkg.repository}>.`)
-    process.exit(0)
+if (opts.v || opts.version) {
+  logMessage("v%s", version);
 }
 
 if (!path || options.help) {
-    console.log(`Usage: psenv <PATH> [OPTION]...
+  logMessage(`Usage: psenv <PATH> [OPTION]...
 
 Options:
-    --output=FILENAME   Write to a file (e.g. --output=.env)
-    --to-upper-case     Convert the name to upper case (e.g. name to NAME)
-    --recursive         Retrieve all parameters within a hierarchy
-    --is-dotenv         Output with the format NAME=value
-    --is-cmd            Output for Windows Command Prompt (cmd.exe)
-    -h, --help          Print this message
-    -v, --version       Print the current version of psenv`)
-    process.exit(Number(!options.help))
+  --output=FILENAME  Write to a file (e.g. --output=.env)
+  --to-upper-case    Convert the name to upper case (e.g. name to NAME)
+  --recursive        Retrieve all parameters within a hierarchy
+  --is-dotenv        Output with the format NAME=value
+  --is-cmd           Output for Windows Command Prompt (cmd.exe)
+  -h, --help         Print this message
+  -v, --version      Print the current version of psenv`);
 }
 
-const allArgsWithIsPrefix = args.filter(arg => arg.startsWith('--is-'))
+getParameters(path, opts.recursive)
+  .then(processParameters)
+  .catch(() => logError('Unable to get parameters.'));
 
-if (allArgsWithIsPrefix.length > 0 && options.filename) {
-    const invalidOption = allArgsWithIsPrefix[0]
-    console.error(`[error] --filename could not be used with ${invalidOption}`)
-    process.exit(1)
-}
-if (allArgsWithIsPrefix.length > 1) {
-    const conflicts = allArgsWithIsPrefix.slice(0, 2)
-    console.error(`[error] Conflict between ${conflicts.join(' and ')}.`)
-    process.exit(1)
-}
-if (!path.startsWith('/')) {
-    console.error(`[error] Path must starts with '/'.`)
-    process.exit(1)
+function logMessage(message) {
+  console.log(message);
+  process.exit(0);
 }
 
-getParameters(path, options.recursive).then((allParameters) => {
-    const variables = allParameters.flat().map(({name, value}) => {
-        name = name.split('/').reverse()[0]
+function logError(message) {
+  console.error(`[error] ${message}`);
+  process.exit(1);
+}
 
-        if (options.toUpperCase) {
-            name = name.toUpperCase()
-        }
-        if (options.output || options.isDotenv) {
-            return `${name}=${value}`
-        }
-        if (options.isCmd) {
-            return `set "${name}=${value}"`
-        }
-        return `export ${name}='${value}'`
+function processParameters(parameters) {
+  const variables = parameters
+    .flat() // The initial 'parameters' value will be Array of Arrays
+    .map(({ name, value }) => toVariable(name, value))
+    .join('\n');
+
+  if (opts.output) {
+    fs.writeFile(opts.output, raw, (error) => {
+      if (error) logError(`Unable to create the file.`);
+      logMessage('File is created successfully.');
     })
+  } else {
+    logMessage(variables);
+  }
+}
 
-    const raw = variables.join('\n')
+function toVariable(name, value) {
+  name = getName(name)
+  if (opts.toUpperCase)
+    name = name.toUpperCase()
+  if (opts.output || opts.isDotenv)
+    return `${name}=${value}`
+  if (opts.isCmd)
+    return `set "${name}=${value}"`
 
-    if (options.output) {
-        fs.writeFile(options.output, raw, (error) => {
-            if (error) {
-                console.error(`[error] Unable to create the file.`)
-                process.exit(1)
-            }
-            console.log('File is created successfully.')
-            process.exit(0)
-        })
-    } else {
-        console.log(raw)
-    }
-}).catch(() => {
-    console.error(`[error] Unable to get parameters.`)
-    process.exit(1)
-})
+  return `export ${name}=${value}`
+}
+
+/*
+ * Get the "environment variable" name from path
+ * @example
+ * getName('/foo/bar/BAZ') === 'BAZ'
+ */
+function getName(path) {
+  return path
+    .split('/')
+    .reverse()[0];
+}
