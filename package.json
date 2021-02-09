@@ -6,7 +6,8 @@
     "psenv": "./index.js"
   },
   "dependencies": {
-    "aws-sdk": "^2.828.0"
+    "aws-sdk": "^2.828.0",
+    "psenv-cli": "^1.1.1"
   },
   "repository": "theuves/psenv",
   "author": "Matheus Alves",
