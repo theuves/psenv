@@ -25,7 +25,7 @@ Options:
 
 if (paths.length === 0) {
   logInfo(`Usage: psenv <PATHS> [OPTION]...
-Try 'psenv --help' to more information.`)
+Try 'psenv --help' for more information.`)
 }
 
 // Every path must starts with a slash ('/')
