@@ -11,7 +11,7 @@ if (opts.v || opts.version) {
 }
 
 if (opts.h || opts.help) {
-  logInfo(`Usage: psenv <PATHS> [OPTION]...
+  logInfo(`Usage: psenv [OPTION]... <PATH>...
 
 Options:
   --output=FILENAME  write to a file (e.g. --output=.env)
@@ -24,7 +24,7 @@ Options:
 }
 
 if (paths.length === 0) {
-  logInfo(`Usage: psenv <PATHS> [OPTION]...
+  logInfo(`Usage: psenv [OPTION]... <PATH>...
 Try 'psenv --help' for more information.`)
 }
 
