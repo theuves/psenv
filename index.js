@@ -4,14 +4,14 @@ const minimist = require('minimist')
 const { version } = require('./package.json')
 const getParameters = require('./get-parameters')
 const opts = minimist(process.argv.slice(2))
-const path = opts._[0]
+const paths = opts._
 
 if (opts.v || opts.version) {
   logInfo(`v${version}`)
 }
 
-if (!path || opts.help) {
-  logInfo(`Usage: psenv <PATH> [OPTION]...
+if (opts.h || opts.help) {
+  logInfo(`Usage: psenv <PATHS> [OPTION]...
 
 Options:
   --output=FILENAME  write to a file (e.g. --output=.env)
@@ -23,19 +23,25 @@ Options:
   -v, --version      print the current version of psenv`)
 }
 
-if (!path) {
-  logInfo(`Usage: psenv <PATH> [OPTION]...
+if (paths.length === 0) {
+  logInfo(`Usage: psenv <PATHS> [OPTION]...
 Try 'psenv --help' to more information.`)
 }
 
-getParameters(path, opts.recursive)
+// Every path must starts with a slash ('/')
+for (let path of paths) {
+  if (!path.startsWith('/'))
+    logError(`Invalid path: ${path}`)
+}
+
+getParameters(paths, opts.recursive)
   .then(processParameters)
   .catch(() => logError('Unable to get parameters.'))
 
 function processParameters(parameters) {
   const variables = parameters
     .flat() // The initial 'parameters' value will be a array of arrays
-    .map(({ name, value }) => toVariable(name, value))
+    .map(({ Name, Value }) => toVariable(Name, Value))
     .join('\n')
 
   if (opts.output) {
