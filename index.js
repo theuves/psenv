@@ -10,7 +10,7 @@ if (opts.v || opts.version) {
   logInfo(`v${version}`)
 }
 
-if (!path || options.help) {
+if (!path || opts.help) {
   logInfo(`Usage: psenv <PATH> [OPTION]...
 
 Options:
