@@ -6,13 +6,13 @@ module.exports = function getParameters(paths, isRecursive = false) {
     let index = 0
     const parameters = []
     const getParametersByPath = (path, nextToken = undefined) => {
-      const options = {
+      const opts = {
         Path: path,
         WithDecryption: true,
         Recursive: isRecursive,
         NextToken: nextToken,
       }
-      ssmClient.getParametersByPath(options, (err, data) => {
+      ssmClient.getParametersByPath(opts, (err, data) => {
         if (err) {
           reject(new Error('Unable to get the parameters.'))
         } else {
