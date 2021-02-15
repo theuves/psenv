@@ -16,15 +16,17 @@ module.exports = function getParameters(paths, isRecursive = false) {
         if (err) {
           reject(new Error('Unable to get the parameters.'))
         } else {
+          // If the path has more than 10 parameters then will be returned a
+          // token (.NextToken) to get the next 10 parameters, and so on
           if (data.NextToken) {
             getParametersByPath(path, data.NextToken)
           } else {
             parameters.push(data.Parameters)
-            if (paths.length - 1 === index) {
-              resolve(parameters)
-            } else {
-              index += 1
+            if (index > paths.length - 1) {
+              index++
               getParametersByPath(paths[index])
+            } else {
+              resolve(parameters)
             }
           }
         }
